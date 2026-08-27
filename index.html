@@ -188,7 +188,13 @@
 <script>
 const SUPABASE_URL="https://xqezdynkttwwfcoqsjtu.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY="sb_publishable_pxyDyNeG7WE97d1Fm6pbDg_LBWin3UH";
-const db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{
+  auth:{
+    persistSession:true,
+    autoRefreshToken:true,
+    detectSessionInUrl:true
+  }
+});
 
 const fallbackArtists=[
 {name:"Gunna",genre:"HIPHOP / TRAP",image_url:"https://images.unsplash.com/photo-1520699049698-acd2fccb8cc8?auto=format&fit=crop&w=900&q=80"},
@@ -490,7 +496,23 @@ async function deleteArtist(id){
 }
 
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
-resetSongForm();addSubmissionLine();loadAll();db.auth.onAuthStateChange(()=>setTimeout(refreshAdmin,0));refreshAdmin();
+resetSongForm();
+addSubmissionLine();
+loadAll();
+
+db.auth.onAuthStateChange((event,session)=>{
+  setTimeout(()=>{
+    refreshAdmin();
+  },100);
+});
+
+(async()=>{
+  // Give Supabase a moment to consume the email-link callback/hash on GitHub Pages.
+  await new Promise(r=>setTimeout(r,300));
+  const {data}=await db.auth.getSession();
+  updateAuthUI(data.session?.user||null);
+  await refreshAdmin();
+})();
 </script>
 </body>
 </html>
