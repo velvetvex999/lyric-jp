@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#090909">
 <title>LYRIC JP — SWAG HIPHOP 和訳</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+/* submissions expects: submitter_name, artist_name, song_title, genre, meaning, slang, image_url, audio_url, lyrics, status, reviewed_at */
+</script>
 <style>
 :root{--bg:#080808;--s:#111;--s2:#171717;--line:#292929;--text:#f5f5f5;--muted:#858585}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;padding-bottom:74px}button,input,textarea,select{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
@@ -20,6 +22,13 @@
 .modal{position:fixed;inset:0;z-index:100;background:#000b;display:none;align-items:flex-end;justify-content:center}.modal.open{display:flex}.sheet{width:min(850px,100%);max-height:88vh;overflow:auto;background:#111;border:1px solid #333;border-bottom:0;border-radius:24px 24px 0 0;padding:25px}.close{float:right;border:1px solid #333;background:#191919;color:#ddd;width:36px;height:36px;border-radius:50%}.detailTop{padding:22px 0 18px;border-bottom:1px solid #292929}.detailTitle{font-size:clamp(36px,7vw,62px);font-weight:300;letter-spacing:-.04em;margin:10px 0}.detailArtist{color:#999}.detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:20px}.lyricCard{background:#0b0b0b;border:1px solid #242424;border-radius:14px;padding:15px}.lyricEn{font-size:14px;line-height:1.55}.lyricJa{font-size:14px;line-height:1.55;color:#bbb;margin-top:7px}.explain{font-size:13px;line-height:1.8;color:#aaa;white-space:pre-wrap}.audio{width:100%;margin-top:15px}.fav{background:#181818;color:#ddd;border:1px solid #333;border-radius:9px;padding:10px 13px;font-size:9px}.artistDetailImg{width:110px;height:110px;object-fit:cover;border-radius:15px;filter:grayscale(1);float:left;margin-right:16px}
 .status{position:fixed;right:14px;top:75px;z-index:120;background:#181818;border:1px solid #383838;border-radius:10px;padding:10px 13px;color:#bbb;font-size:10px;display:none}.empty{padding:28px;text-align:center;color:#666;border:1px dashed #333;border-radius:14px;font-size:11px}.footer{max-width:1140px;margin:60px auto 0;padding:25px 20px;border-top:1px solid #222;color:#555;font-size:9px;display:flex;justify-content:space-between}.bottom{position:fixed;z-index:60;bottom:0;left:0;right:0;height:64px;background:#0b0b0bf5;border-top:1px solid #292929;backdrop-filter:blur(18px);display:flex;justify-content:center;gap:48px;padding-top:12px}.bottom a{text-align:center;color:#666;font-size:8px;letter-spacing:.1em}.bottom b{display:block;color:#fff;font-size:15px;margin-bottom:4px}
 @media(max-width:760px){.navlinks{display:none}.hero{padding:57px 0 34px}.hero h1{font-size:56px}.songGrid{grid-template-columns:1fr 1fr}.song{min-height:180px;padding:16px}.song h3{font-size:20px}.artistCard{flex-basis:155px}.trend{grid-template-columns:1fr}.fields,.detailGrid{grid-template-columns:1fr}.footer{display:block}.bottom{gap:26px}.lyricLine{grid-template-columns:1fr 1fr 32px}.manageRow{align-items:flex-start;flex-direction:column}.modal{align-items:flex-end}}
+
+.submitCard{margin-top:55px}.submitCard .adminBox{background:#101010}
+.reviewBox{margin-top:20px;border-top:1px solid #292929;padding-top:20px}
+.loginRow{display:flex;gap:8px;margin-top:10px}.loginRow input{flex:1;min-width:0;background:#090909;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px}.loginRow button{background:#fff;color:#000;border:0;border-radius:9px;padding:11px 15px;font-size:10px;font-weight:900}
+.pendingRow{border-top:1px solid #252525;padding:14px 0;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.pendingMeta b{font-size:13px}.pendingMeta small{display:block;color:#777;font-size:10px;margin-top:4px;line-height:1.5}.pendingActions{display:flex;gap:6px;flex-wrap:wrap}.pendingActions button{background:#181818;color:#bbb;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:9px}.pendingActions .approve{background:#fff;color:#000;border-color:#fff}
+@media(max-width:760px){.loginRow{flex-direction:column}.pendingRow{flex-direction:column}}
+
 </style>
 </head>
 <body>
@@ -27,7 +36,7 @@
 
 <header class="header"><div class="nav">
 <a class="brand" href="#">lyric <span>jp</span><small> / hiphop</small></a>
-<div class="navlinks"><a href="#latest">LATEST</a><a href="#artists">ARTISTS</a><a href="#trending">TRENDING</a><a href="#manage">MANAGE</a></div>
+<div class="navlinks"><a href="#latest">LATEST</a><a href="#artists">ARTISTS</a><a href="#trending">TRENDING</a><a href="#submit">SUBMIT</a><a href="#manage">MANAGE</a></div>
 </div></header>
 
 <main class="wrap">
@@ -59,6 +68,34 @@
 <div class="trend"><div class="trendBox"><div class="mini">MOST SEARCHED / RECENT</div><h3 id="trendArtist">Ken Carson</h3><p>サイトに登録された最新データを表示。</p></div><div class="trendBox" id="trendList"></div></div>
 </section>
 
+
+<section class="section submitCard" id="submit">
+<div class="sectionhead"><h2>SUBMIT</h2><span>COMMUNITY</span></div>
+<div class="adminBox">
+<div class="notice">曲やアーティスト情報を投稿できます。投稿は審査待ちになり、管理者が承認したものだけ公開されます。</div>
+<div class="fields">
+<input id="subterName" placeholder="投稿者名（任意）">
+<input id="subArtist" placeholder="アーティスト名 *">
+</div>
+<div class="fields">
+<input id="subTitle" placeholder="曲名 *">
+<input id="subGenre" placeholder="ジャンル / 例: TRAP / RAGE">
+</div>
+<div class="fields">
+<textarea id="subMeaning" placeholder="曲の意味・解説（任意）"></textarea>
+<textarea id="subSlang" placeholder="スラング・パンチライン解説（任意）"></textarea>
+</div>
+<div class="fields">
+<input id="subImageUrl" placeholder="アーティスト画像URL（任意）">
+<input id="subAudio" placeholder="音源URL（任意・権利のある音源のみ）">
+</div>
+<div id="subLyrics"></div>
+<button class="adminBtn dark" type="button" onclick="addSubmissionLine()">＋ ADD LYRIC LINE</button>
+<button class="adminBtn" onclick="submitContribution()">SEND FOR REVIEW</button>
+<div id="submitStatus" class="notice" style="margin-top:7px"></div>
+</div>
+</section>
+
 <section class="admin" id="manage">
 <div class="adminBox">
 <h2>MANAGE</h2>
@@ -86,6 +123,18 @@
 <button class="adminBtn" onclick="saveArtist()">ADD ARTIST</button><button class="adminBtn dark" onclick="resetArtistForm()">CANCEL EDIT</button>
 </div>
 
+
+<div class="reviewBox">
+<h3 style="font-size:12px;font-weight:400">管理者ログイン / 承認</h3>
+<div class="notice">ここは管理者専用。メールのログインリンクから入ると、承認待ちの投稿を確認できます。</div>
+<div class="loginRow"><input id="adminEmail" type="email" placeholder="管理者メールアドレス"><button onclick="sendAdminLogin()">LOGIN LINK</button></div>
+<div id="adminAuthStatus" class="notice" style="margin-top:7px">未ログイン</div>
+<div id="pendingSection" style="display:none;margin-top:18px">
+<h3 style="font-size:12px;font-weight:400">承認待ち</h3>
+<div id="pendingList"></div>
+</div>
+</div>
+
 <div class="editorSection"><h3 style="font-size:12px;font-weight:400">登録済み曲</h3><div id="savedSongs"></div></div>
 <div class="editorSection"><h3 style="font-size:12px;font-weight:400">登録済みアーティスト</h3><div id="savedArtists"></div></div>
 </div>
@@ -93,7 +142,7 @@
 </main>
 
 <footer class="footer"><div>© 2026 LYRIC JP</div><div>SWAG HIPHOP TRANSLATIONS</div></footer>
-<nav class="bottom"><a href="#"><b>⌂</b>HOME</a><a href="#latest"><b>♫</b>LATEST</a><a href="#artists"><b>◎</b>ARTISTS</a><a href="#trending"><b>↗</b>TRENDING</a><a href="#manage"><b>＋</b>MANAGE</a></nav>
+<nav class="bottom"><a href="#"><b>⌂</b>HOME</a><a href="#latest"><b>♫</b>LATEST</a><a href="#artists"><b>◎</b>ARTISTS</a><a href="#trending"><b>↗</b>TRENDING</a><a href="#submit"><b>＋</b>SUBMIT</a><a href="#manage"><b>⚙</b>MANAGE</a></nav>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
 
@@ -173,6 +222,146 @@ function openArtist(id){
 }
 function closeModal(){document.getElementById("modal").classList.remove("open")}
 
+
+let adminUser=null;
+
+function addSubmissionLine(en="",ja=""){
+ const d=document.createElement("div");
+ d.className="lyricLine";
+ d.innerHTML=`<input class="subLyricEn" placeholder="English lyric" value="${esc(en)}"><input class="subLyricJa" placeholder="日本語訳" value="${esc(ja)}"><button type="button" class="lineBtn" onclick="this.parentElement.remove()">×</button>`;
+ document.getElementById("subLyrics").appendChild(d);
+}
+
+async function submitContribution(){
+ const artist=document.getElementById("subArtist").value.trim();
+ const title=document.getElementById("subTitle").value.trim();
+ if(!artist||!title){alert("アーティスト名と曲名を入力してください");return}
+ const lyrics=[...document.querySelectorAll("#subLyrics .lyricLine")].map(r=>({
+   en:r.querySelector(".subLyricEn").value.trim(),
+   ja:r.querySelector(".subLyricJa").value.trim()
+ })).filter(x=>x.en||x.ja);
+ const row={
+   submitter_name:document.getElementById("subterName").value.trim(),
+   artist_name:artist,
+   song_title:title,
+   genre:document.getElementById("subGenre").value.trim()||"HIPHOP",
+   meaning:document.getElementById("subMeaning").value.trim(),
+   slang:document.getElementById("subSlang").value.trim(),
+   image_url:document.getElementById("subImageUrl").value.trim(),
+   audio_url:document.getElementById("subAudio").value.trim(),
+   lyrics,
+   status:"pending"
+ };
+ const {error}=await db.from("submissions").insert(row);
+ document.getElementById("submitStatus").textContent=error?"送信失敗: "+error.message:"投稿しました。承認されるとサイトに公開されます。";
+ if(!error){
+  ["subterName","subArtist","subTitle","subGenre","subMeaning","subSlang","subImageUrl","subAudio"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("subLyrics").innerHTML="";
+  addSubmissionLine();
+ }
+}
+
+async function sendAdminLogin(){
+ const email=document.getElementById("adminEmail").value.trim();
+ if(!email){alert("管理者メールアドレスを入力してください");return}
+ const {error}=await db.auth.signInWithOtp({
+   email,
+   options:{emailRedirectTo:location.href}
+ });
+ document.getElementById("adminAuthStatus").textContent=error?"ログイン失敗: "+error.message:"ログインリンクをメールに送りました。メールを開いてログインしてください。";
+}
+
+async function refreshAdmin(){
+ const {data}=await db.auth.getUser();
+ adminUser=data.user||null;
+ const s=document.getElementById("adminAuthStatus");
+ const p=document.getElementById("pendingSection");
+ if(!adminUser){s.textContent="未ログイン";p.style.display="none";return}
+ const {data:row,error}=await db.from("admins").select("user_id").eq("user_id",adminUser.id).maybeSingle();
+ if(error||!row){
+   s.textContent="ログイン中: "+adminUser.email+" / 管理者登録が必要です";
+   p.style.display="none";
+   return;
+ }
+ s.textContent="管理者としてログイン中: "+adminUser.email;
+ p.style.display="block";
+ await loadPending();
+}
+
+async function loadPending(){
+ const el=document.getElementById("pendingList");
+ const {data,error}=await db.from("submissions").select("*").eq("status","pending").order("created_at",{ascending:false});
+ if(error){el.innerHTML='<div class="notice">承認待ちの取得に失敗しました: '+esc(error.message)+'</div>';return}
+ el.innerHTML=data?.length?data.map(x=>`
+ <div class="pendingRow">
+  <div class="pendingMeta">
+   <b>${esc(x.song_title)}</b>
+   <small>${esc(x.artist_name)} / ${esc(x.genre||"HIPHOP")}<br>
+   投稿者: ${esc(x.submitter_name||"匿名")}<br>
+   ${esc(x.meaning||"")}</small>
+  </div>
+  <div class="pendingActions">
+   <button class="approve" onclick="approveSubmission('${esc(x.id)}')">APPROVE</button>
+   <button onclick="rejectSubmission('${esc(x.id)}')">REJECT</button>
+  </div>
+ </div>`).join(""):'<div class="notice">承認待ちはありません。</div>';
+}
+
+async function approveSubmission(id){
+ if(!adminUser)return;
+ const {data:sub,error}=await db.from("submissions").select("*").eq("id",id).single();
+ if(error){toast("投稿取得失敗: "+error.message);return}
+ try{
+  let a=artists.find(x=>x.name.toLowerCase()===String(sub.artist_name).toLowerCase());
+  if(!a){
+    const ar=await db.from("artists").insert({
+      name:sub.artist_name,
+      genre:sub.genre||"HIPHOP",
+      image_url:sub.image_url||""
+    }).select().single();
+    if(ar.error)throw ar.error;
+    a=ar.data;
+  }else if(sub.image_url){
+    const ar=await db.from("artists").update({image_url:sub.image_url,genre:sub.genre||a.genre||"HIPHOP"}).eq("id",a.id);
+    if(ar.error)throw ar.error;
+  }
+  const extra={
+    lyricjp:1,
+    status:"NEW",
+    meaning:sub.meaning||"",
+    slang:sub.slang||"",
+    lyrics:Array.isArray(sub.lyrics)?sub.lyrics:[],
+    audio:sub.audio_url||""
+  };
+  const sr=await db.from("songs").insert({
+    title:sub.song_title,
+    artist_id:a.id,
+    genre:sub.genre||"HIPHOP",
+    explanation:JSON.stringify(extra)
+  });
+  if(sr.error)throw sr.error;
+  const rr=await db.from("submissions").update({
+    status:"approved",
+    reviewed_at:new Date().toISOString()
+  }).eq("id",id);
+  if(rr.error)throw rr.error;
+  toast("承認して公開しました");
+  await loadAll();
+  await loadPending();
+ }catch(e){toast("承認失敗: "+e.message)}
+}
+
+async function rejectSubmission(id){
+ if(!adminUser)return;
+ const {error}=await db.from("submissions").update({
+   status:"rejected",
+   reviewed_at:new Date().toISOString()
+ }).eq("id",id);
+ if(error){toast("却下失敗: "+error.message);return}
+ toast("却下しました");
+ await loadPending();
+}
+
 function resetSongForm(){document.getElementById("songId").value="";["songArtist","songTitle","songGenre","songStatus","songMeaning","songSlang","songAudio"].forEach(id=>document.getElementById(id).value="");document.getElementById("lyricLines").innerHTML="";addLyricLine();document.querySelector("#songManage")?.scrollIntoView?.()}
 function editSongById(id){
  const x=songs.find(s=>String(s.id)===String(id));if(!x)return;
@@ -217,7 +406,7 @@ async function deleteArtist(id){
 }
 
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
-resetSongForm();loadAll();
+resetSongForm();addSubmissionLine();loadAll();db.auth.onAuthStateChange(()=>setTimeout(refreshAdmin,0));refreshAdmin();
 </script>
 </body>
 </html>
