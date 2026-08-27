@@ -29,6 +29,19 @@
 .pendingRow{border-top:1px solid #252525;padding:14px 0;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.pendingMeta b{font-size:13px}.pendingMeta small{display:block;color:#777;font-size:10px;margin-top:4px;line-height:1.5}.pendingActions{display:flex;gap:6px;flex-wrap:wrap}.pendingActions button{background:#181818;color:#bbb;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:9px}.pendingActions .approve{background:#fff;color:#000;border-color:#fff}
 @media(max-width:760px){.loginRow{flex-direction:column}.pendingRow{flex-direction:column}}
 
+
+.authBox{margin-top:20px;border-top:1px solid #292929;padding-top:20px}
+.authGrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.authGrid input{width:100%;background:#090909;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px;outline:none}
+.authActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.authBtn{background:#fff;color:#000;border:0;border-radius:9px;padding:11px 16px;font-size:10px;font-weight:900}
+.authBtn.dark{background:#191919;color:#ddd;border:1px solid #333}
+.userBar{display:none;margin-top:10px;padding:10px 12px;border:1px solid #292929;border-radius:9px;background:#0b0b0b;font-size:10px;color:#aaa}
+.userBar b{color:#fff}
+#manage{display:none}
+#submit{display:none}
+@media(max-width:760px){.authGrid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -36,7 +49,7 @@
 
 <header class="header"><div class="nav">
 <a class="brand" href="#">lyric <span>jp</span><small> / hiphop</small></a>
-<div class="navlinks"><a href="#latest">LATEST</a><a href="#artists">ARTISTS</a><a href="#trending">TRENDING</a><a href="#submit">SUBMIT</a><a href="#manage">MANAGE</a></div>
+<div class="navlinks"><a href="#latest">LATEST</a><a href="#artists">ARTISTS</a><a href="#trending">TRENDING</a><a href="#account">ACCOUNT</a><a href="#submit">SUBMIT</a><a href="#manage">MANAGE</a></div>
 </div></header>
 
 <main class="wrap">
@@ -69,29 +82,57 @@
 </section>
 
 
+<section class="section" id="account">
+<div class="sectionhead"><h2>ACCOUNT</h2><span>AUTH</span></div>
+<div class="adminBox">
+<div id="loggedOutBox">
+<div class="notice">メールアドレスとパスワードでログイン。初回はアカウント作成できます。</div>
+<div class="authGrid">
+<input id="authEmail" type="email" placeholder="メールアドレス">
+<input id="authPassword" type="password" placeholder="パスワード">
+</div>
+<div class="authActions">
+<button class="authBtn" onclick="signUpUser()">CREATE ACCOUNT</button>
+<button class="authBtn dark" onclick="signInUser()">LOGIN</button>
+<button class="authBtn dark" onclick="sendMagicLink()">EMAIL LINK</button>
+</div>
+<div id="authStatus" class="notice" style="margin-top:7px"></div>
+</div>
+<div id="loggedInBox" style="display:none">
+<div class="userBar" style="display:block">LOGIN: <b id="currentUserEmail"></b></div>
+<div class="authActions">
+<button class="authBtn dark" onclick="signOutUser()">LOGOUT</button>
+</div>
+</div>
+</div>
+</section>
+
 <section class="section submitCard" id="submit">
 <div class="sectionhead"><h2>SUBMIT</h2><span>COMMUNITY</span></div>
 <div class="adminBox">
-<div class="notice">曲やアーティスト情報を投稿できます。投稿は審査待ちになり、管理者が承認したものだけ公開されます。</div>
-<div class="fields">
+<div class="notice">ログインしたユーザーが曲・和訳・解説を投稿できます。投稿は審査待ちになり、管理者が承認したものだけ公開されます。</div>
+<div id="submitLoginNotice" class="notice" style="margin-top:10px">投稿するにはログインしてください。</div>
+<div class="fields" id="submitForm" style="display:none">
 <input id="subterName" placeholder="投稿者名（任意）">
 <input id="subArtist" placeholder="アーティスト名 *">
 </div>
-<div class="fields">
+<div class="fields" id="submitFields2" style="display:none">
 <input id="subTitle" placeholder="曲名 *">
 <input id="subGenre" placeholder="ジャンル / 例: TRAP / RAGE">
 </div>
-<div class="fields">
+<div class="fields" id="submitFields3" style="display:none">
 <textarea id="subMeaning" placeholder="曲の意味・解説（任意）"></textarea>
 <textarea id="subSlang" placeholder="スラング・パンチライン解説（任意）"></textarea>
 </div>
-<div class="fields">
+<div class="fields" id="submitFields4" style="display:none">
 <input id="subImageUrl" placeholder="アーティスト画像URL（任意）">
 <input id="subAudio" placeholder="音源URL（任意・権利のある音源のみ）">
 </div>
 <div id="subLyrics"></div>
+<div id="submitButtons" style="display:none">
 <button class="adminBtn dark" type="button" onclick="addSubmissionLine()">＋ ADD LYRIC LINE</button>
 <button class="adminBtn" onclick="submitContribution()">SEND FOR REVIEW</button>
+</div>
 <div id="submitStatus" class="notice" style="margin-top:7px"></div>
 </div>
 </section>
@@ -125,10 +166,8 @@
 
 
 <div class="reviewBox">
-<h3 style="font-size:12px;font-weight:400">管理者ログイン / 承認</h3>
-<div class="notice">ここは管理者専用。メールのログインリンクから入ると、承認待ちの投稿を確認できます。</div>
-<div class="loginRow"><input id="adminEmail" type="email" placeholder="管理者メールアドレス"><button onclick="sendAdminLogin()">LOGIN LINK</button></div>
-<div id="adminAuthStatus" class="notice" style="margin-top:7px">未ログイン</div>
+<h3 style="font-size:12px;font-weight:400">管理者 / 承認</h3>
+<div id="adminAuthStatus" class="notice" style="margin-top:7px">ログイン状態を確認中…</div>
 <div id="pendingSection" style="display:none;margin-top:18px">
 <h3 style="font-size:12px;font-weight:400">承認待ち</h3>
 <div id="pendingList"></div>
@@ -142,7 +181,7 @@
 </main>
 
 <footer class="footer"><div>© 2026 LYRIC JP</div><div>SWAG HIPHOP TRANSLATIONS</div></footer>
-<nav class="bottom"><a href="#"><b>⌂</b>HOME</a><a href="#latest"><b>♫</b>LATEST</a><a href="#artists"><b>◎</b>ARTISTS</a><a href="#trending"><b>↗</b>TRENDING</a><a href="#submit"><b>＋</b>SUBMIT</a><a href="#manage"><b>⚙</b>MANAGE</a></nav>
+<nav class="bottom"><a href="#"><b>⌂</b>HOME</a><a href="#latest"><b>♫</b>LATEST</a><a href="#artists"><b>◎</b>ARTISTS</a><a href="#trending"><b>↗</b>TRENDING</a><a href="#account"><b>◎</b>ACCOUNT</a><a href="#submit"><b>＋</b>SUBMIT</a><a href="#manage"><b>⚙</b>MANAGE</a></nav>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="sheet"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
 
@@ -223,6 +262,50 @@ function openArtist(id){
 function closeModal(){document.getElementById("modal").classList.remove("open")}
 
 
+
+async function signUpUser(){
+ const email=document.getElementById("authEmail").value.trim();
+ const password=document.getElementById("authPassword").value;
+ if(!email||!password){alert("メールアドレスとパスワードを入力してください");return}
+ if(password.length<6){alert("パスワードは6文字以上にしてください");return}
+ const {data,error}=await db.auth.signUp({email,password});
+ document.getElementById("authStatus").textContent=error?"登録失敗: "+error.message:
+   (data.session?"アカウントを作成してログインしました。":"確認メールを送信しました。メールを確認してください。");
+}
+async function signInUser(){
+ const email=document.getElementById("authEmail").value.trim();
+ const password=document.getElementById("authPassword").value;
+ if(!email||!password){alert("メールアドレスとパスワードを入力してください");return}
+ const {error}=await db.auth.signInWithPassword({email,password});
+ document.getElementById("authStatus").textContent=error?"ログイン失敗: "+error.message:"ログインしました。";
+}
+async function sendMagicLink(){
+ const email=document.getElementById("authEmail").value.trim();
+ if(!email){alert("メールアドレスを入力してください");return}
+ const {error}=await db.auth.signInWithOtp({email,options:{emailRedirectTo:location.href}});
+ document.getElementById("authStatus").textContent=error?"送信失敗: "+error.message:"ログインリンクを送信しました。メールを確認してください。";
+}
+async function signOutUser(){
+ await db.auth.signOut();
+ toast("ログアウトしました");
+}
+function updateAuthUI(user){
+ const out=document.getElementById("loggedOutBox"), inn=document.getElementById("loggedInBox");
+ const submitNotice=document.getElementById("submitLoginNotice");
+ const ids=["submitForm","submitFields2","submitFields3","submitFields4","submitButtons"];
+ if(user){
+   out.style.display="none"; inn.style.display="block";
+   document.getElementById("currentUserEmail").textContent=user.email||"ログインユーザー";
+   submitNotice.textContent="ログイン中。投稿できます。";
+   ids.forEach(id=>document.getElementById(id).style.display="grid");
+   document.getElementById("submitButtons").style.display="block";
+ }else{
+   out.style.display="block"; inn.style.display="none";
+   submitNotice.textContent="投稿するにはログインしてください。";
+   ids.forEach(id=>document.getElementById(id).style.display="none");
+ }
+}
+
 let adminUser=null;
 
 function addSubmissionLine(en="",ja=""){
@@ -233,6 +316,8 @@ function addSubmissionLine(en="",ja=""){
 }
 
 async function submitContribution(){
+ const {data:authData}=await db.auth.getUser();
+ if(!authData.user){alert("先にログインしてください");return}
  const artist=document.getElementById("subArtist").value.trim();
  const title=document.getElementById("subTitle").value.trim();
  if(!artist||!title){alert("アーティスト名と曲名を入力してください");return}
@@ -261,29 +346,28 @@ async function submitContribution(){
  }
 }
 
-async function sendAdminLogin(){
- const email=document.getElementById("adminEmail").value.trim();
- if(!email){alert("管理者メールアドレスを入力してください");return}
- const {error}=await db.auth.signInWithOtp({
-   email,
-   options:{emailRedirectTo:location.href}
- });
- document.getElementById("adminAuthStatus").textContent=error?"ログイン失敗: "+error.message:"ログインリンクをメールに送りました。メールを開いてログインしてください。";
-}
-
 async function refreshAdmin(){
  const {data}=await db.auth.getUser();
  adminUser=data.user||null;
+ updateAuthUI(adminUser);
+ const manage=document.getElementById("manage");
  const s=document.getElementById("adminAuthStatus");
  const p=document.getElementById("pendingSection");
- if(!adminUser){s.textContent="未ログイン";p.style.display="none";return}
- const {data:row,error}=await db.from("admins").select("user_id").eq("user_id",adminUser.id).maybeSingle();
- if(error||!row){
-   s.textContent="ログイン中: "+adminUser.email+" / 管理者登録が必要です";
+ if(!adminUser){
+   manage.style.display="none";
+   s.textContent="未ログイン";
    p.style.display="none";
    return;
  }
- s.textContent="管理者としてログイン中: "+adminUser.email;
+ const {data:row,error}=await db.from("admins").select("user_id").eq("user_id",adminUser.id).maybeSingle();
+ if(error||!row){
+   manage.style.display="none";
+   s.textContent="ログイン中: "+(adminUser.email||"") ;
+   p.style.display="none";
+   return;
+ }
+ manage.style.display="block";
+ s.textContent="管理者としてログイン中: "+(adminUser.email||"");
  p.style.display="block";
  await loadPending();
 }
