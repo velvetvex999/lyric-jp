@@ -100,6 +100,13 @@
 </div>
 <div id="loggedInBox" style="display:none">
 <div class="userBar" style="display:block">LOGIN: <b id="currentUserEmail"></b></div>
+<div id="adminSetupBox" class="authBox" style="display:none">
+<div class="notice">このアカウントはまだ管理者として登録されていません。サイト所有者の初回セットアップ時だけ、下のボタンから管理者登録を行ってください。</div>
+<div class="authActions">
+<button class="authBtn" onclick="registerCurrentUserAsAdmin()">REGISTER AS ADMIN</button>
+</div>
+<div id="adminSetupStatus" class="notice" style="margin-top:7px"></div>
+</div>
 <div class="authActions">
 <button class="authBtn dark" onclick="signOutUser()">LOGOUT</button>
 </div>
@@ -385,6 +392,24 @@ async function submitContribution(){
  }
 }
 
+async function registerCurrentUserAsAdmin(){
+ const {data,error}=await db.auth.getUser();
+ if(error||!data.user){toast("先にログインしてください");return}
+ const box=document.getElementById("adminSetupStatus");
+ box.textContent="管理者登録を確認中…";
+ const {data:existing,error:checkError}=await db.from("admins").select("user_id").limit(1);
+ if(checkError){box.textContent="管理者登録を確認できません: "+checkError.message;return}
+ if((existing||[]).length){box.textContent="すでに管理者が登録されています。既存の管理者に追加してもらってください。";return}
+ const {error:insertError}=await db.from("admins").insert({user_id:data.user.id});
+ if(insertError){
+   box.textContent="管理者登録に失敗しました: "+insertError.message+" / Supabaseのadmins INSERTポリシーが必要です。";
+   return;
+ }
+ box.textContent="管理者登録しました。管理画面を開きます。";
+ toast("管理者として登録しました");
+ await refreshAdmin();
+}
+
 async function refreshAdmin(){
  const {data}=await db.auth.getUser();
  adminUser=data.user||null;
@@ -396,6 +421,8 @@ async function refreshAdmin(){
    manage.style.display="none";
    s.textContent="未ログイン";
    p.style.display="none";
+   const setup=document.getElementById("adminSetupBox");
+   if(setup) setup.style.display="none";
    return;
  }
  const {data:row,error}=await db.from("admins").select("user_id").eq("user_id",adminUser.id).maybeSingle();
@@ -403,11 +430,15 @@ async function refreshAdmin(){
    manage.style.display="none";
    s.textContent="ログイン中: "+(adminUser.email||"") ;
    p.style.display="none";
+   const setup=document.getElementById("adminSetupBox");
+   if(setup) setup.style.display="block";
    return;
  }
  manage.style.display="block";
  s.textContent="管理者としてログイン中: "+(adminUser.email||"");
  p.style.display="block";
+ const setup=document.getElementById("adminSetupBox");
+ if(setup) setup.style.display="none";
  await loadPending();
 }
 
