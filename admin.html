@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090909">
+<title>LYRIC JP — ADMIN</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#080808;--s:#111;--line:#292929;--text:#f5f5f5;--muted:#858585}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;padding-bottom:50px}button,input,textarea{font:inherit}button{cursor:pointer}
+.wrap{max-width:1000px;margin:auto;padding:25px 20px}.top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding:15px 0 20px}.brand{font-size:20px;letter-spacing:.08em}.brand span{color:#777}.tag{font-size:9px;letter-spacing:.18em;color:#777}.box{background:#101010;border:1px solid var(--line);border-radius:18px;padding:22px;margin-top:18px}.box h2{font-size:16px;font-weight:400;margin:0 0 8px}.notice{font-size:10px;color:#777;line-height:1.7}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.fields input,.fields textarea{width:100%;background:#090909;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px;outline:none}.fields textarea{min-height:100px;resize:vertical}.btn{background:#fff;color:#000;border:0;border-radius:9px;padding:11px 16px;margin-top:10px;font-size:10px;font-weight:900}.btn.dark{background:#191919;color:#ddd;border:1px solid #333}.actions{display:flex;gap:8px;flex-wrap:wrap}.editor{border-top:1px solid var(--line);margin-top:20px;padding-top:20px}.lyricLine{display:grid;grid-template-columns:1fr 1fr 38px;gap:8px;margin:8px 0}.lyricLine input{width:100%;background:#090909;color:#ddd;border:1px solid #303030;border-radius:9px;padding:10px}.lineBtn{background:#181818;color:#888;border:1px solid #333;border-radius:9px}.row{border-top:1px solid #252525;padding:13px 0;display:flex;justify-content:space-between;gap:12px;align-items:center}.meta b{font-size:13px}.meta small{display:block;color:#777;font-size:10px;margin-top:3px}.rowActions{display:flex;gap:6px}.rowActions button,.pendingActions button{background:#181818;color:#bbb;border:1px solid #333;border-radius:8px;padding:8px 10px;font-size:9px}.pending{border-top:1px solid #252525;padding:14px 0;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.pendingMeta b{font-size:13px}.pendingMeta small{display:block;color:#777;font-size:10px;margin-top:4px;line-height:1.5}.approve{background:#fff!important;color:#000!important;border-color:#fff!important}.status{position:fixed;right:14px;top:15px;z-index:100;background:#181818;border:1px solid #383838;border-radius:10px;padding:10px 13px;color:#bbb;font-size:10px;display:none}.hidden{display:none!important}
+@media(max-width:760px){.fields{grid-template-columns:1fr}.pending,.row{flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<div class="status" id="status"></div>
+<div class="wrap">
+<div class="top"><div><div class="brand">lyric <span>jp</span></div><div class="tag">ADMIN CONTROL PANEL</div></div><a href="./index.html" class="tag">← PUBLIC SITE</a></div>
+
+<section id="loginBox" class="box">
+<h2>ADMIN LOGIN</h2>
+<div class="notice">管理者として登録済みのアカウントだけが管理画面を利用できます。</div>
+<div class="fields"><input id="email" type="email" placeholder="メールアドレス"><input id="password" type="password" placeholder="パスワード"></div>
+<div class="actions"><button class="btn" onclick="login()">LOGIN</button><button class="btn dark" onclick="magic()">EMAIL LINK</button></div>
+<div id="loginStatus" class="notice" style="margin-top:8px"></div>
+</section>
+
+<section id="adminPanel" class="hidden">
+<div class="box">
+<h2>ADMIN</h2><div id="adminStatus" class="notice"></div>
+<div class="actions"><button class="btn dark" onclick="logout()">LOGOUT</button><button class="btn dark" onclick="location.href='./index.html'">PUBLIC SITE</button></div>
+</div>
+
+<div class="box">
+<h2>承認待ち</h2><div id="pendingList" class="notice">読み込み中…</div>
+</div>
+
+<div class="box">
+<h2>曲を追加・編集</h2>
+<input type="hidden" id="songId">
+<div class="fields"><input id="songArtist" placeholder="アーティスト名"><input id="songTitle" placeholder="曲名"></div>
+<div class="fields"><input id="songGenre" placeholder="ジャンル / 例: TRAP / RAGE"><input id="songStatus" placeholder="タグ / 例: NEW / HOT"></div>
+<div id="lyricLines"></div>
+<button class="btn dark" type="button" onclick="addLyricLine()">＋ ADD LYRIC LINE</button>
+<div class="fields"><textarea id="songMeaning" placeholder="曲の意味・解説"></textarea><textarea id="songSlang" placeholder="スラング・パンチライン解説"></textarea></div>
+<input id="songAudio" placeholder="音源URL（任意。自分が権利を持つ音源のみ）" style="width:100%;margin-top:10px;background:#090909;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px">
+<div class="actions"><button class="btn" onclick="saveSong()">SAVE TRANSLATION</button><button class="btn dark" onclick="resetSongForm()">CANCEL EDIT</button></div>
+</div>
+
+<div class="box">
+<h2>アーティストを追加・編集</h2>
+<input type="hidden" id="artistId">
+<div class="fields"><input id="artistName" placeholder="アーティスト名"><input id="artistGenre" placeholder="ジャンル / 例: HIPHOP / RAP"></div>
+<input id="artistImageUrl" placeholder="画像URL（https://...）" style="width:100%;margin-top:10px;background:#090909;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px">
+<div class="actions"><button class="btn" onclick="saveArtist()">SAVE ARTIST</button><button class="btn dark" onclick="resetArtistForm()">CANCEL EDIT</button></div>
+</div>
+
+<div class="box"><h2>登録済み曲</h2><div id="savedSongs"></div></div>
+<div class="box"><h2>登録済みアーティスト</h2><div id="savedArtists"></div></div>
+</section>
+</div>
+
+<script>
+const SUPABASE_URL="https://xqezdynkttwwfcoqsjtu.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_pxyDyNeG7WE97d1Fm6pbDg_LBWin3UH";
+const db=supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,flowType:"pkce"}});
+const SITE_URL="https://velvetvex999.github.io/lyric-jp/";
+let artists=[],songs=[],adminUser=null;
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+function toast(t){const e=document.getElementById("status");e.textContent=t;e.style.display="block";clearTimeout(window.__toast);window.__toast=setTimeout(()=>e.style.display="none",2500)}
+function extraOf(x){try{const o=JSON.parse(x||"");return o&&o.lyricjp===1?o:{}}catch{return {}}}
+async function login(){const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;if(!email||!password){document.getElementById("loginStatus").textContent="メールアドレスとパスワードを入力してください";return}const {error}=await db.auth.signInWithPassword({email,password});document.getElementById("loginStatus").textContent=error?"ログイン失敗: "+error.message:"ログインしました。確認中…"}
+async function magic(){const email=document.getElementById("email").value.trim();if(!email){document.getElementById("loginStatus").textContent="メールアドレスを入力してください";return}const {error}=await db.auth.signInWithOtp({email,options:{emailRedirectTo:location.href,shouldCreateUser:false}});document.getElementById("loginStatus").textContent=error?"送信失敗: "+error.message:"ログインリンクを送信しました。"}
+async function logout(){await db.auth.signOut();location.reload()}
+async function checkAdmin(){
+ const {data,error}=await db.auth.getUser();adminUser=data.user||null;
+ if(error||!adminUser){showLoggedOut();return}
+ const {data:row}=await db.from("admins").select("user_id").eq("user_id",adminUser.id).maybeSingle();
+ if(!row){document.getElementById("loginStatus").textContent="このアカウントは管理者として登録されていません。";await db.auth.signOut();showLoggedOut();return}
+ document.getElementById("loginBox").classList.add("hidden");document.getElementById("adminPanel").classList.remove("hidden");document.getElementById("adminStatus").textContent="管理者としてログイン中: "+(adminUser.email||"");await loadAll();await loadPending()
+}
+function showLoggedOut(){document.getElementById("loginBox").classList.remove("hidden");document.getElementById("adminPanel").classList.add("hidden")}
+async function loadAll(){
+ const [ar,sr]=await Promise.all([db.from("artists").select("id,name,genre,image_url,created_at").order("created_at",{ascending:false}),db.from("songs").select("id,title,artist_id,genre,explanation,created_at").order("created_at",{ascending:false})]);
+ artists=ar.data||[];const map=new Map(artists.map(a=>[a.id,a.name]));songs=(sr.data||[]).map(x=>{const e=extraOf(x.explanation);return {...x,artist:map.get(x.artist_id)||"Unknown",status:e.status||"NEW",lyrics:e.lyrics||[],meaning:e.meaning||"",slang:e.slang||"",audio:e.audio||""}});renderManage()
+}
+function renderManage(){
+ document.getElementById("savedSongs").innerHTML=songs.length?songs.map(x=>`<div class="row"><div class="meta"><b>${esc(x.title)}</b><small>${esc(x.artist)} / ${esc(x.genre||"")}</small></div><div class="rowActions"><button onclick="editSong('${esc(x.id)}')">EDIT</button><button onclick="deleteSong('${esc(x.id)}')">DELETE</button></div></div>`).join(""):'<div class="notice">まだ登録された曲はありません。</div>';
+ document.getElementById("savedArtists").innerHTML=artists.length?artists.map(x=>`<div class="row"><div class="meta"><b>${esc(x.name)}</b><small>${esc(x.genre||"")}</small></div><div class="rowActions"><button onclick="editArtist('${esc(x.id)}')">EDIT</button><button onclick="deleteArtist('${esc(x.id)}')">DELETE</button></div></div>`).join(""):'<div class="notice">まだ登録されたアーティストはありません。</div>'
+}
+async function loadPending(){const el=document.getElementById("pendingList");const {data,error}=await db.from("submissions").select("*").eq("status","pending").order("created_at",{ascending:false});if(error){el.textContent="承認待ちの取得に失敗: "+error.message;return}el.innerHTML=data?.length?data.map(x=>`<div class="pending"><div class="pendingMeta"><b>${esc(x.song_title)}</b><small>${esc(x.artist_name)} / ${esc(x.genre||"HIPHOP")}<br>投稿者: ${esc(x.submitter_name||"匿名")}<br>${esc(x.meaning||"")}</small></div><div class="pendingActions"><button class="approve" onclick="approve('${esc(x.id)}')">APPROVE</button><button onclick="reject('${esc(x.id)}')">REJECT</button></div></div>`).join(""):'<div class="notice">承認待ちはありません。</div>'}
+async function approve(id){const {data:sub,error}=await db.from("submissions").select("*").eq("id",id).single();if(error){toast(error.message);return}try{let a=artists.find(x=>x.name.toLowerCase()===String(sub.artist_name).toLowerCase());if(!a){const ar=await db.from("artists").insert({name:sub.artist_name,genre:sub.genre||"HIPHOP",image_url:sub.image_url||""}).select().single();if(ar.error)throw ar.error;a=ar.data}else if(sub.image_url){const ar=await db.from("artists").update({image_url:sub.image_url,genre:sub.genre||a.genre||"HIPHOP"}).eq("id",a.id);if(ar.error)throw ar.error}const extra={lyricjp:1,status:"NEW",meaning:sub.meaning||"",slang:sub.slang||"",lyrics:Array.isArray(sub.lyrics)?sub.lyrics:[],audio:sub.audio_url||""};const sr=await db.from("songs").insert({title:sub.song_title,artist_id:a.id,genre:sub.genre||"HIPHOP",explanation:JSON.stringify(extra)});if(sr.error)throw sr.error;const rr=await db.from("submissions").update({status:"approved",reviewed_at:new Date().toISOString()}).eq("id",id);if(rr.error)throw rr.error;toast("承認して公開しました");await loadAll();await loadPending()}catch(e){toast("承認失敗: "+e.message)}}
+async function reject(id){const {error}=await db.from("submissions").update({status:"rejected",reviewed_at:new Date().toISOString()}).eq("id",id);if(error){toast(error.message);return}toast("却下しました");await loadPending()}
+function addLyricLine(en="",ja=""){const d=document.createElement("div");d.className="lyricLine";d.innerHTML=`<input class="lyricEn" placeholder="English lyric" value="${esc(en)}"><input class="lyricJa" placeholder="日本語訳" value="${esc(ja)}"><button type="button" class="lineBtn" onclick="this.parentElement.remove()">×</button>`;document.getElementById("lyricLines").appendChild(d)}
+function resetSongForm(){document.getElementById("songId").value="";["songArtist","songTitle","songGenre","songStatus","songMeaning","songSlang","songAudio"].forEach(id=>document.getElementById(id).value="");document.getElementById("lyricLines").innerHTML="";addLyricLine()}
+function editSong(id){const x=songs.find(s=>String(s.id)===String(id));if(!x)return;document.getElementById("songId").value=x.id;document.getElementById("songArtist").value=x.artist;document.getElementById("songTitle").value=x.title;document.getElementById("songGenre").value=x.genre||"";document.getElementById("songStatus").value=x.status||"";document.getElementById("songMeaning").value=x.meaning||"";document.getElementById("songSlang").value=x.slang||"";document.getElementById("songAudio").value=x.audio||"";document.getElementById("lyricLines").innerHTML="";(x.lyrics?.length?x.lyrics:[{en:"",ja:""}]).forEach(l=>addLyricLine(l.en,l.ja));window.scrollTo({top:0,behavior:"smooth"})}
+async function findOrCreateArtist(name){let a=artists.find(x=>x.name.toLowerCase()===name.toLowerCase());if(a)return a;const r=await db.from("artists").insert({name,genre:"HIPHOP",image_url:""}).select().single();if(r.error)throw r.error;return r.data}
+async function saveSong(){const id=document.getElementById("songId").value,artistName=document.getElementById("songArtist").value.trim(),title=document.getElementById("songTitle").value.trim();if(!artistName||!title){alert("アーティスト名と曲名を入力してください");return}try{const a=await findOrCreateArtist(artistName);const lyrics=[...document.querySelectorAll("#lyricLines .lyricLine")].map(r=>({en:r.querySelector(".lyricEn").value.trim(),ja:r.querySelector(".lyricJa").value.trim()})).filter(x=>x.en||x.ja);const extra={lyricjp:1,status:document.getElementById("songStatus").value.trim()||"NEW",meaning:document.getElementById("songMeaning").value,slang:document.getElementById("songSlang").value,lyrics,audio:document.getElementById("songAudio").value.trim()};const row={title,artist_id:a.id,genre:document.getElementById("songGenre").value.trim()||"HIPHOP",explanation:JSON.stringify(extra)};const r=id?await db.from("songs").update(row).eq("id",id):await db.from("songs").insert(row);if(r.error)throw r.error;toast(id?"曲を更新しました":"曲を追加しました");resetSongForm();await loadAll()}catch(e){toast("保存失敗: "+e.message)}}
+async function deleteSong(id){if(!confirm("この曲を削除しますか？"))return;const r=await db.from("songs").delete().eq("id",id);if(r.error){toast("削除失敗: "+r.error.message);return}toast("曲を削除しました");await loadAll()}
+function resetArtistForm(){["artistId","artistName","artistGenre","artistImageUrl"].forEach(id=>document.getElementById(id).value="")}
+function editArtist(id){const a=artists.find(x=>String(x.id)===String(id));if(!a)return;document.getElementById("artistId").value=a.id;document.getElementById("artistName").value=a.name;document.getElementById("artistGenre").value=a.genre||"";document.getElementById("artistImageUrl").value=a.image_url||"";window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"})}
+async function saveArtist(){const id=document.getElementById("artistId").value,name=document.getElementById("artistName").value.trim();if(!name){alert("アーティスト名を入力してください");return}const row={name,genre:document.getElementById("artistGenre").value.trim()||"HIPHOP",image_url:document.getElementById("artistImageUrl").value.trim()};const r=id?await db.from("artists").update(row).eq("id",id):await db.from("artists").insert(row);if(r.error){toast("保存失敗: "+r.error.message);return}toast(id?"アーティストを更新しました":"アーティストを追加しました");resetArtistForm();await loadAll()}
+async function deleteArtist(id){if(!confirm("アーティストを削除しますか？関連する曲も削除される可能性があります。"))return;const r=await db.from("artists").delete().eq("id",id);if(r.error){toast("削除失敗: "+r.error.message);return}toast("アーティストを削除しました");await loadAll()}
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&document.activeElement?.id==="password")login()});
+addLyricLine();
+db.auth.onAuthStateChange(()=>setTimeout(checkAdmin,50));
+(async()=>{try{const url=new URL(location.href);const code=url.searchParams.get("code");if(code){const {error}=await db.auth.exchangeCodeForSession(code);if(error)throw error;history.replaceState({},document.title,location.href.split("?")[0])}await checkAdmin()}catch(e){document.getElementById("loginStatus").textContent="ログイン処理に失敗: "+e.message}})();
+</script>
+</body>
+</html>
