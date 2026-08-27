@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090909">
+<title>LYRIC JP — SWAG HIPHOP 和訳</title>
+<style>
+:root{--bg:#090909;--surface:#111;--surface2:#171717;--line:#292929;--text:#f5f5f5;--muted:#929292;--accent:#fff}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;letter-spacing:-.01em;padding-bottom:72px}a{color:inherit;text-decoration:none}button,input{font:inherit}
+.header{position:sticky;top:0;z-index:50;background:#090909e8;border-bottom:1px solid var(--line);backdrop-filter:blur(18px)}.nav{max-width:1200px;margin:auto;height:64px;padding:0 20px;display:flex;align-items:center;justify-content:space-between}.brand{font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,sans-serif;font-weight:300;font-size:21px;letter-spacing:.08em;text-transform:lowercase}.brand small{font-weight:400;color:#777;margin-left:4px}.navlinks{display:flex;gap:26px;font-size:10px;font-weight:700;letter-spacing:.14em;color:#888}.navlinks a:hover{color:#fff}
+.wrap{max-width:1200px;margin:auto;padding:0 20px}.hero{padding:78px 0 45px}.eyebrow{font-size:10px;letter-spacing:.22em;color:#777;font-weight:700}.hero h1{font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(48px,8vw,104px);line-height:.88;letter-spacing:-.045em;margin:18px 0 27px;font-weight:300;text-transform:none}.hero h1 span{color:#555}.hero p{max-width:610px;color:#999;font-size:14px;line-height:1.8;margin:0}.search{margin-top:30px;max-width:720px;display:flex}.search input{min-width:0;flex:1;background:#141414;color:#fff;border:1px solid #303030;border-right:0;border-radius:12px 0 0 12px;padding:17px 18px;outline:none;font-size:14px}.search input:focus{border-color:#666}.search button{background:#fff;color:#000;border:0;padding:0 25px;border-radius:0 12px 12px 0;font-size:11px;font-weight:900;letter-spacing:.08em}
+.section{padding-top:28px}.sectionhead{display:flex;align-items:end;justify-content:space-between;margin:0 0 16px}.sectionhead h2{font-family:Arial,"Helvetica Neue",sans-serif;font-size:10px;letter-spacing:.22em;margin:0;font-weight:900;text-transform:uppercase}.sectionhead span{font-size:9px;color:#666;letter-spacing:.15em}
+.heroCard{position:relative;min-height:390px;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:linear-gradient(135deg,#202020,#0b0b0b);display:flex;align-items:flex-end;padding:32px}.heroCard:before{content:"";position:absolute;width:430px;height:430px;border-radius:50%;right:-70px;top:-100px;background:radial-gradient(circle,#444,#111 62%,transparent 63%);opacity:.55}.heroText{position:relative;z-index:2}.mini{font-size:9px;letter-spacing:.18em;color:#888}.heroTitle{font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,sans-serif;font-size:clamp(44px,6.5vw,78px);font-weight:300;letter-spacing:-.035em;line-height:.9;margin:9px 0}.heroArtist{font-size:14px;color:#aaa}
+.songGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.song{min-height:205px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px;display:flex;flex-direction:column;justify-content:space-between;transition:.2s}.song:hover{transform:translateY(-3px);border-color:#555;background:#151515}.rank{font-size:9px;color:#555;letter-spacing:.16em}.song h3{font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,sans-serif;font-size:24px;line-height:1.05;margin:10px 0 7px;letter-spacing:-.025em;font-weight:400}.songArtist{color:#888;font-size:12px}.songFoot{display:flex;justify-content:space-between;border-top:1px solid #252525;padding-top:12px;font-size:9px;letter-spacing:.12em;color:#666}.songFoot b{color:#fff}
+.chips{display:flex;gap:7px;overflow:auto;padding-bottom:5px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chip{white-space:nowrap;border:1px solid #292929;border-radius:99px;padding:9px 13px;font-size:9px;color:#aaa}.chip.active{background:#fff;color:#000;border-color:#fff}
+.artistRail{display:flex;gap:12px;overflow:auto;padding-bottom:8px;scrollbar-width:none}.artistRail::-webkit-scrollbar{display:none}.artistCard{position:relative;flex:0 0 205px;aspect-ratio:1;border-radius:19px;overflow:hidden;background:#222;border:1px solid #282828}.artistCard img{width:100%;height:100%;object-fit:cover;display:block;filter:grayscale(1);transition:.25s}.artistCard:hover img{filter:grayscale(0);transform:scale(1.04)}.artistInfo{position:absolute;left:0;right:0;bottom:0;padding:55px 16px 15px;background:linear-gradient(transparent,#000e)}.artistInfo small{font-size:8px;color:#aaa;letter-spacing:.13em}.artistInfo strong{display:block;font-family:"Helvetica Neue",-apple-system,BlinkMacSystemFont,sans-serif;font-size:20px;letter-spacing:.01em;margin-top:3px;font-weight:400}
+.trend{display:grid;grid-template-columns:1.1fr 1fr;gap:12px}.trendBox{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:22px}.trendBox h3{font-size:28px;margin:7px 0;letter-spacing:-.06em}.trendBox p{font-size:12px;line-height:1.7;color:#888;margin:0}.list{display:flex;flex-direction:column}.listItem{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #222;padding:14px 0}.listItem:last-child{border:0}.listItem .left{display:flex;gap:13px;align-items:center}.listNum{font-size:9px;color:#555;width:20px}.listTitle{font-size:14px;font-weight:700}.listArtist{font-size:10px;color:#777;margin-top:3px}.badge{font-size:8px;color:#888;border:1px solid #333;border-radius:99px;padding:5px 7px}
+.admin{margin-top:60px;padding:0 20px}.adminBox{max-width:1160px;margin:auto;background:#111;border:1px solid #292929;border-radius:18px;padding:22px}.adminBox h2{margin:0 0 7px;font-size:16px}.notice{font-size:10px;color:#777;line-height:1.7}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.fields input,.upload{width:100%;background:#0a0a0a;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px}.upload{margin-top:10px}.adminBtn{background:#fff;color:#000;border:0;border-radius:9px;padding:12px 17px;margin-top:10px;font-size:10px;font-weight:900}.preview{display:flex;align-items:center;gap:10px;margin-top:10px;color:#777;font-size:10px}.preview img{width:55px;height:55px;object-fit:cover;border-radius:8px}
+.footer{max-width:1160px;margin:60px auto 0;padding:25px 20px;border-top:1px solid #222;color:#555;font-size:9px;display:flex;justify-content:space-between}.bottom{position:fixed;z-index:60;left:0;right:0;bottom:0;height:64px;background:#0c0c0cf2;border-top:1px solid #292929;backdrop-filter:blur(18px);display:flex;justify-content:center;gap:48px;padding-top:13px}.bottom a{text-align:center;color:#666;font-size:8px;letter-spacing:.1em}.bottom a b{display:block;color:#fff;font-size:15px;margin-bottom:4px}
+.savedSong{border-top:1px solid #292929;padding:14px 0;display:flex;justify-content:space-between;gap:12px}.savedSongTitle{font-size:13px}.savedSongArtist{font-size:10px;color:#777;margin-top:4px}.deleteBtn{background:transparent!important;color:#777!important;border:1px solid #333!important;border-radius:7px!important;padding:7px 10px!important;font-size:9px!important}.noResults{display:none;padding:30px;text-align:center;border:1px dashed #333;border-radius:15px;color:#666;font-size:12px}
+@media(max-width:760px){.navlinks{display:none}.hero{padding:57px 0 34px}.hero h1{font-size:58px}.heroCard{min-height:300px;padding:23px;border-radius:19px}.songGrid{grid-template-columns:1fr 1fr}.song{min-height:180px;padding:16px}.song h3{font-size:20px}.artistCard{flex-basis:155px}.trend{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.footer{display:block}.footer div+div{margin-top:9px}.bottom{gap:27px}}
+<style>
+.hero h1 span{color:#666;font-weight:300}
+.hero h1{max-width:900px}
+.eyebrow,.mini,.sectionhead h2,.sectionhead span,.navlinks,.rank,.songFoot,.artistInfo small{font-weight:300}
+
+.lyricEditor{margin-top:12px}.lyricLine{display:grid;grid-template-columns:1fr 1fr 38px;gap:8px;margin-bottom:8px}.lyricLine input{width:100%;background:#0a0a0a;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px}.lineBtn{background:#1a1a1a;color:#888;border:1px solid #333;border-radius:9px}.lyricDisplay{margin-top:12px;border-top:1px solid #292929}.lyricPair{padding:18px 0;border-bottom:1px solid #222}.lyricEn{font-size:15px;color:#f4f4f4;line-height:1.65}.lyricJa{font-size:13px;color:#777;line-height:1.7;margin-top:5px}.lyricsLabel{font-size:9px;letter-spacing:.18em;color:#666;margin-bottom:10px}
+@media(max-width:700px){.lyricLine{grid-template-columns:1fr 1fr 32px}.lyricLine input{padding:10px 8px;font-size:12px}}
+</style></style>
+</head>
+<body>
+<header class="header"><div class="nav"><a class="brand" href="#">LYRIC<span style="color:#777">JP</span><small> / HIPHOP</small></a><div class="navlinks"><a href="#latest">LATEST</a><a href="#artists">ARTISTS</a><a href="#trending">TRENDING</a><a href="#songManage">MANAGE</a></div></div></header>
+
+<div class="wrap">
+<section class="hero">
+<div class="eyebrow">SWAG HIPHOP TRANSLATIONS</div>
+<h1>SWAGな<br><span>HIPHOP</span>和訳サイト</h1>
+<p>海外HIPHOPを、もっと深く。和訳だけじゃなく、スラング、パンチライン、背景まで日本語でわかる。</p>
+<div class="search"><input id="search" placeholder="アーティスト・曲名を検索"><button onclick="searchSongs()">SEARCH</button></div>
+</section>
+
+<section class="section">
+<div class="sectionhead"><h2>FEATURED</h2><span>NOW PLAYING</span></div>
+<a class="heroCard" href="#latest"><div class="heroText"><div class="mini">LATEST TRANSLATION / 001</div><div class="heroTitle">overseas</div><div class="heroArtist">Ken Carson</div></div></a>
+</section>
+
+<section class="section" id="latest">
+<div class="sectionhead"><h2>LATEST TRANSLATIONS</h2><span>NEW</span></div>
+<div class="chips"><span class="chip active">ALL</span><span class="chip">TRAP</span><span class="chip">RAGE</span><span class="chip">RAP</span><span class="chip">R&B</span><span class="chip">DRILL</span></div>
+<div class="songGrid" id="songs"></div>
+<div class="noResults" id="noResults">該当する曲が見つかりません。</div>
+</section>
+
+<section class="section" id="artists">
+<div class="sectionhead"><h2>POPULAR ARTISTS</h2><span>SWIPE →</span></div>
+<div class="artistRail" id="artistGrid"></div>
+</section>
+
+<section class="section" id="trending">
+<div class="sectionhead"><h2>TRENDING</h2><span>THIS WEEK</span></div>
+<div class="trend">
+<div class="trendBox"><div class="mini">MOST SEARCHED</div><h3>Ken Carson</h3><p>今週もっとも検索されているアーティスト。</p></div>
+<div class="trendBox"><div class="list">
+<div class="listItem"><div class="left"><span class="listNum">01</span><div><div class="listTitle">overseas</div><div class="listArtist">Ken Carson</div></div></div><span class="badge">NEW</span></div>
+<div class="listItem"><div class="left"><span class="listNum">02</span><div><div class="listTitle">Pushin P</div><div class="listArtist">Gunna / Future / Young Thug</div></div></div><span class="badge">HOT</span></div>
+<div class="listItem"><div class="left"><span class="listNum">03</span><div><div class="listTitle">Mask Off</div><div class="listArtist">Future</div></div></div><span class="badge">HOT</span></div>
+</div></div>
+</div>
+</section>
+</div>
+
+<section class="admin" id="songManage"><div class="adminBox">
+<h2>TRANSLATION MANAGER</h2>
+<div class="notice">サイト内から曲・和訳・解説を登録できます。現在はこのブラウザ内に保存するデモです。</div>
+<div class="fields">
+<input id="songArtist" placeholder="アーティスト名">
+<input id="songTitle" placeholder="曲名">
+</div>
+<div class="fields">
+<input id="songGenre" placeholder="ジャンル / 例: TRAP">
+<input id="songStatus" placeholder="タグ / 例: NEW">
+</div>
+<div class="lyricEditor">
+<div class="lyricsLabel">LYRIC PAIRS</div>
+<div id="lyricLines"></div>
+<button class="adminBtn" type="button" onclick="addLyricLine()">＋ ADD LINE</button>
+<div class="notice" style="margin-top:8px">英語 → 日本語訳を1セットずつ入力。権利者から掲載許諾を得た歌詞のみ掲載してください。</div>
+</div>
+<textarea id="songMeaning" placeholder="曲の意味・解説" style="width:100%;min-height:100px;margin-top:10px;background:#0a0a0a;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px;resize:vertical"></textarea>
+<textarea id="songSlang" placeholder="スラング・表現解説" style="width:100%;min-height:100px;margin-top:10px;background:#0a0a0a;color:#ddd;border:1px solid #303030;border-radius:9px;padding:12px;resize:vertical"></textarea>
+<button class="adminBtn" onclick="addSong()">ADD TRANSLATION</button>
+<div id="savedSongs" style="margin-top:18px"></div>
+</div></section>
+
+<section class="admin" id="manage"><div class="adminBox">
+<h2>ARTIST MANAGER</h2><div class="notice">アーティスト写真を追加できます。現在はこのブラウザ内に保存するデモです。</div>
+<div class="fields"><input id="artistName" placeholder="アーティスト名"><input id="artistGenre" placeholder="ジャンル"></div>
+<div class="upload"><input id="artistImage" type="file" accept="image/*"><div class="preview" id="preview"></div></div>
+<button class="adminBtn" onclick="addArtist()">ADD ARTIST</button>
+</div></section>
+
+<footer class="footer"><div>© 2026 LYRIC JP</div><div>SWAG HIPHOP TRANSLATIONS / CONTACT / RIGHTS</div></footer>
+<nav class="bottom"><a href="#"><b>⌂</b>HOME</a><a href="#latest"><b>♫</b>LATEST</a><a href="#artists"><b>◎</b>ARTISTS</a><a href="#trending"><b>↗</b>TRENDING</a><a href="#manage"><b>＋</b>MANAGE</a></nav>
+
+<script>
+const defaults=[
+{name:"Gunna",genre:"HIPHOP / TRAP",img:"https://images.unsplash.com/photo-1520699049698-acd2fccb8cc8?auto=format&fit=crop&w=900&q=80"},
+{name:"Future",genre:"HIPHOP / TRAP",img:"https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?auto=format&fit=crop&w=900&q=80"},
+{name:"Travis Scott",genre:"HIPHOP / RAP",img:"https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=900&q=80"},
+{name:"Don Toliver",genre:"HIPHOP / R&B",img:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=900&q=80"}];
+const seedSongs=[
+{artist:"Ken Carson",title:"overseas",genre:"TRAP / RAGE",status:"NEW",original:"",translation:"",meaning:"",slang:""},
+{artist:"Gunna / Future / Young Thug",title:"Pushin P",genre:"HIPHOP",status:"HOT",original:"",translation:"",meaning:"",slang:""},
+{artist:"Future",title:"Mask Off",genre:"HIPHOP",status:"HOT",original:"",translation:"",meaning:"",slang:""}];
+let artists=JSON.parse(localStorage.getItem("lyricjp_artists")||"null")||defaults;
+let songs=JSON.parse(localStorage.getItem("lyricjp_songs")||"null")||seedSongs;
+let selectedImage="";
+
+function renderArtists(){
+ document.getElementById("artistGrid").innerHTML=artists.map(a=>`<a class="artistCard" href="#"><img src="${a.img}" alt=""><div class="artistInfo"><small>${a.genre}</small><strong>${a.name}</strong></div></a>`).join("")
+}
+function renderSongs(){
+ const grid=document.getElementById("songs");
+ grid.innerHTML=songs.map((x,i)=>`<a class="song" data-search="${(x.title+" "+x.artist+" "+x.genre).toLowerCase()}"><div><div class="rank">${String(i+1).padStart(3,"0")} / ${x.status||"HIPHOP"}</div><h3>${escapeHtml(x.title)}</h3><div class="songArtist">${escapeHtml(x.artist)}</div></div><div class="songFoot"><span>${escapeHtml(x.genre||"TRANSLATION")}</span><b>↗</b></div></a>`).join("");
+ renderSavedSongs();
+}
+function escapeHtml(v){return String(v||"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
+function renderSavedSongs(){
+ const el=document.getElementById("savedSongs");
+ if(!songs.length){el.innerHTML="";return}
+ el.innerHTML='<div class="notice">登録済み '+songs.length+' 曲</div>'+songs.map((x,i)=>`<div class="savedSong"><div><div class="savedSongTitle">${escapeHtml(x.title)}</div><div class="savedSongArtist">${escapeHtml(x.artist)}${x.lyrics?` · ${x.lyrics.length} lines`:''}</div></div><button class="deleteBtn" onclick="deleteSong(${i})">DELETE</button></div>`).join("");
+}
+function addLyricLine(en="",ja=""){
+ const row=document.createElement("div");row.className="lyricLine";
+ row.innerHTML=`<input class="lyricEnInput" placeholder="English lyric" value="${escapeAttr(en)}"><input class="lyricJaInput" placeholder="日本語訳" value="${escapeAttr(ja)}"><button type="button" class="lineBtn" onclick="this.parentElement.remove()">×</button>`;
+ document.getElementById("lyricLines").appendChild(row);
+}
+function escapeAttr(v){return String(v||"").replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function addSong(){
+ const artist=document.getElementById("songArtist").value.trim(),title=document.getElementById("songTitle").value.trim();
+ if(!artist||!title){alert("アーティスト名と曲名を入力してください");return}
+ const lyrics=[...document.querySelectorAll("#lyricLines .lyricLine")].map(row=>({en:row.querySelector(".lyricEnInput").value.trim(),ja:row.querySelector(".lyricJaInput").value.trim()})).filter(x=>x.en||x.ja);
+ const song={artist,title,genre:document.getElementById("songGenre").value.trim()||"HIPHOP",status:document.getElementById("songStatus").value.trim()||"NEW",lyrics,meaning:document.getElementById("songMeaning").value,slang:document.getElementById("songSlang").value};
+ songs.unshift(song);localStorage.setItem("lyricjp_songs",JSON.stringify(songs));renderSongs();
+ ["songArtist","songTitle","songGenre","songStatus","songMeaning","songSlang"].forEach(id=>document.getElementById(id).value="");document.getElementById("lyricLines").innerHTML="";addLyricLine();
+ document.getElementById("latest").scrollIntoView({behavior:"smooth"});
+}
+function deleteSong(i){songs.splice(i,1);localStorage.setItem("lyricjp_songs",JSON.stringify(songs));renderSongs()}
+document.getElementById("artistImage").addEventListener("change",e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{selectedImage=r.result;document.getElementById("preview").innerHTML=`<img src="${selectedImage}"><span>${f.name}</span>`};r.readAsDataURL(f)});
+function addArtist(){const n=document.getElementById("artistName").value.trim(),g=document.getElementById("artistGenre").value.trim()||"HIPHOP";if(!n||!selectedImage){alert("名前と写真を選択してください");return}artists.unshift({name:n,genre:g,img:selectedImage});localStorage.setItem("lyricjp_artists",JSON.stringify(artists));renderArtists();document.getElementById("artistName").value="";document.getElementById("artistGenre").value="";document.getElementById("artistImage").value="";document.getElementById("preview").innerHTML="";selectedImage=""}
+function searchSongs(){const q=document.getElementById("search").value.toLowerCase().trim();let count=0;document.querySelectorAll("#songs .song").forEach(c=>{const show=!q||c.dataset.search.includes(q);c.style.display=show?"flex":"none";if(show)count++});document.getElementById("noResults").style.display=count?"none":"block";document.getElementById("latest").scrollIntoView({behavior:"smooth"})}
+document.getElementById("search").addEventListener("keydown",e=>{if(e.key==="Enter")searchSongs()});
+renderArtists();renderSongs();addLyricLine();
+</script>
+</body>
+</html>
